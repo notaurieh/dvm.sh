@@ -25,6 +25,18 @@ You can also take snapshots of Discord versions:
 * `dvm snapshot apply <branch> <name>`
 * `dvm snapshot remove <branch> <name>`
 
+### Can I use this?
+Probably. This script only depends on `curl`, `bash` and GNU coreutils.
+
+| OS/Kernel | DVM?      |
+|-----------|-----------|
+| Linux     | Yep!      |
+| BSD       | Yep!*     |
+| macOS     | Yep!      |
+| Windows   | Nope      |
+
+*\*DVM supports BSD just fine, but Discord doesn't. Because of that, you'll likely have to use the compatibility layer.*
+
 ## Roadmap
 - [ ] Script clean-up
 - [ ] Properly document subcommand usage in `_dvm_usage`
