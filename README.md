@@ -18,9 +18,9 @@ There are several other commands you can use:
 * `dvm uninstall <branch>` removes a specific branch
 * `dvm clean <branch>` clears cache, local storage and any leftovers
 * `dvm desktop <branch>` generates a desktop file
-* `dvm list` lists all versions and branches available
+* `dvm list` lists all latest available versions and branches
 
-You can also take snapshots of Discord versions:
+You can also take snapshots of Discord branches (it'll also include client mods):
 * `dvm snapshot create <branch> <name>`
 * `dvm snapshot apply <branch> <name>`
 * `dvm snapshot remove <branch> <name>`
@@ -35,7 +35,7 @@ Probably. This script only depends on `curl`, `bash` and GNU coreutils.
 | macOS     | Yep!      |
 | Windows   | Nope      |
 
-*\*DVM supports BSD just fine, but Discord doesn't. Because of that, you'll likely have to use the compatibility layer.*
+*\*DVM supports BSD just fine, but Discord doesn't. Because of that, it is likely that you'll have to use the compatibility layer.*
 
 ## Roadmap
 - [ ] Script clean-up
