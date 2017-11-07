@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Discord{branch_specifier} (DVM-managed)
+GenericName=Internet Messenger
+Exec={dvm_local}/branches/{branch}/Discord{branch_specifier}/Discord{branch_specifier}
+Icon={dvm_local}/branches/{branch}/Discord{branch_specifier}/discord.png
+Type=Application
+StartupNotify=true
+Categories=Network;InstantMessaging
+StartupWMClass=discord
