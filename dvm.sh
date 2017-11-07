@@ -42,7 +42,11 @@ _dvm_usage() {
     echo "       install   <branch>"
     echo "       update    <branch>"
     echo "       uninstall <branch>"
+    echo "       desktop   <branch>"
     echo "       list"
+    echo "       snapshot create <branch> <name>"
+    echo "       snapshot apply  <branch> <name>"
+    echo "       snapshot remove <branch> <name>"
     # echo "todo:"
     # echo "       component apply     <branch> <name>"
     # echo "       component install   <name>"
@@ -58,7 +62,7 @@ _dvm_ensure_dir() {
 }
 
 _dvm_ensure_dirs() {
-    dirs=("sym" "branches" "components")
+    dirs=("sym" "branches" "components" "snapshots")
     for dir in "${dirs[@]}"; do
         _dvm_ensure_dir $dir
     done
@@ -249,7 +253,7 @@ _dvm_run() {
 }
 
 _dvm_get_answer() {
-    read -p "Are you sure you want to do this? " -n 1 -r
+    read -p "Are you sure you want to proceed? " -n 1 -r
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "t"
     fi
@@ -343,6 +347,52 @@ _dvm_ensure_args() {
         _dvm_usage
         exit 1
     fi
+}
+
+_dvm_snapshot_create() {
+    echo "snapshot: creating archive..."
+    tar c -C $DVM_LOCAL/branches/$1 . | gzip > $DVM_LOCAL/snapshots/$1-$2.tar.gz
+    echo "snapshot: done"
+}
+
+__dvm_snapshot_apply() {
+    if [ ! -f "$DVM_LOCAL/snapshots/$1-$2.tar.gz" ]; then
+        echo "snapshot: file not found"
+        exit 1
+    fi
+    echo
+    echo "snapshot: uncompressing archive..."
+    tar -xzf $DVM_LOCAL/snapshots/$1-$2.tar.gz -C $DVM_LOCAL/branches/$1/
+    echo "snapshot: done"
+    echo "You can remove the applied snapshot using dvm snapshot remove <branch> <name>, e.g. dvm snapshot remove $1 $2"
+}
+
+_dvm_snapshot_apply() {
+    echo "This utility will clear all modifications you have applied to your Discord client."
+    if [ ! -z "$(_dvm_get_answer)" ]; then
+        rm -rf $DVM_LOCAL/branches/$1/*
+        __dvm_snapshot_apply $@
+        exit 0
+    fi
+    echo
+    echo "You can always take a snapshot of branch $1 and apply another one!"
+}
+
+_dvm_snapshot_remove() {
+    rm -f $DVM_LOCAL/snapshots/$1-$2.tar.gz
+}
+
+_dvm_snapshot() {
+    local branch_specifier
+    branch_specifier=$(_dvm_get_branch_specifier $2)
+    _dvm_ensure_args $# 3
+    _dvm_ensure_branch $2 $branch_specifier
+    if [ ! -n "$(type -t _dvm_snapshot_$1)" ]; then
+        echo "snapshot:$1: no such subcommand."
+        _dvm_usagge
+        exit 1
+    fi
+    _dvm_snapshot_$1 ${@:2}
 }
 
 dvm() {
