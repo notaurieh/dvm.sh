@@ -32,10 +32,11 @@ Probably. This script only depends on `curl`, `bash` and GNU coreutils.
 |-----------|-----------|
 | Linux     | Yep!      |
 | BSD       | Yep!*     |
-| macOS     | Yep!      |
-| Windows   | Nope      |
+| macOS     | Nope!**   |
+| Windows   | Nope!     |
 
 *\*DVM supports BSD just fine, but Discord doesn't. Because of that, it is likely that you'll have to use the compatibility layer.*
+*\*\*DVM supports downloading OSX binaries, but it doesn't support installing them*
 
 ## Roadmap
 - [ ] Script clean-up
