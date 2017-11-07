@@ -1,9 +1,13 @@
 #!/bin/env bash
 
-# TODO: Mac support and custom variables
-export DVM_UPDATE_ENDPOINT="https://discordapp.com/api/v7/updates/%s?platform=linux"
-export DVM_DL_ENDPOINT="https://%s.discordapp.net/apps/linux/%s/%s-%s.tar.gz"
+# TODO Custom env variables
+export DVM_UPDATE_ENDPOINT="https://discordapp.com/api/v7/updates/%s?platform=%s"
+export DVM_DL_ENDPOINT="https://%s.discordapp.net/apps/%s/%s/%s.tar.gz"
 export DVM_LOCAL=$HOME/.dvm
+
+__is_mac() {
+    uname | grep -q "Darwin"
+}
 
 __containsElement() {
   local e match="$1"
@@ -95,7 +99,13 @@ _dvm_get_version() {
     # $1 = branch
     local update_url
     local json
-    update_url=$(printf $DVM_UPDATE_ENDPOINT $1)
+    local platform
+    if [ ! -z "$(__is_mac)" ];  then
+        platform="osx"
+    else
+        platform="linux"
+    fi
+    update_url=$(printf $DVM_UPDATE_ENDPOINT $1 $platform)
     json=$(curl -o- -XGET -s -H "DVM" $update_url)
     if [[ $json == *"404"* ]]; then
         echo "Branch $1 not found: Discord returned 404"
@@ -109,17 +119,28 @@ _dvm_install_version() {
     # $2 = version
     local dlserver_suffix
     local dlserver_suffix_
+    local branch_specifier
+    local platform
+    local filename
     local DL_PATH
     local tempfile
     dlserver_suffix_=$(_dvm_get_dlserver_suffix $1)
     dlserver_suffix="dl$dlserver_suffix_"
-    DL_PATH=$(printf "$DVM_DL_ENDPOINT" $dlserver_suffix $2 "discord$dlserver_suffix_" $2)
+    branch_specifier=$(_dvm_get_branch_specifier $1)
+    if [ ! -z "$(__is_mac)" ]; then
+        platform="osx"
+        filename="Discord$branch_specifier"
+    else
+        platform="linux"
+        filename="discord-$1-$2"
+    fi
+    DL_PATH=$(printf "$DVM_DL_ENDPOINT" $dlserver_suffix $platform $2 $filename)
     echo "Downloading from $DL_PATH"
     tempfile=$(mktemp --suffix .tar.gz)
     curl -o $tempfile -XGET --progress-bar -H "DVM" $DL_PATH
     mkdir $DVM_LOCAL/branches/$1/
     tar -xzf $tempfile -C $DVM_LOCAL/branches/$1
-    echo $version > $DVM_LOCAL/branches/$1/Discord$(_dvm_get_branch_specifier $1)/.version
+    echo $version > $DVM_LOCAL/branches/$1/Discord$branch_specifier/.version
 }
 
 _dvm_install() {
