@@ -1,4 +1,6 @@
 # Discord Version Manager
+A really crappy script that manages your Discord versions!
+
 ### Why?
 Why not? Managing Discord branches and versions on Linux is boring, why not have a tool do it for you?
 
@@ -17,3 +19,16 @@ There are several other commands you can use:
 * `dvm clean <branch>` clears cache, local storage and any leftovers
 * `dvm desktop <branch>` generates a desktop file
 * `dvm list` lists all versions and branches available
+
+You can also take snapshots of Discord versions:
+* `dvm snapshot create <branch> <name>`
+* `dvm snapshot apply <branch> <name>`
+* `dvm snapshot remove <branch> <name>`
+
+## Roadmap
+- [ ] Script clean-up
+- [ ] Properly document subcommand usage in `_dvm_usage`
+- [ ] `source` bash and ZSH support
+- [ ] Components (`beautifuldiscord`, `mydiscord` etc...) 
+  - [ ] Component file repatching after update
+- [ ] Integrity checking
