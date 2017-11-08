@@ -203,6 +203,8 @@ __dvm_ensure_branch() {
         echo 1
     elif [ ! -f "$DVM_LOCAL/branches/$1/Discord$2/.version" ]; then
         echo 2
+    elif [ -z "$(cat $DVM_LOCAL/branches/$1/Discord$2/.version)" ]; then
+        echo 2
     fi
 }
 
