@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # TODO Custom env variables
 export DVM_UPDATE_ENDPOINT="https://discordapp.com/api/v7/updates/%s?platform=%s"
@@ -136,7 +136,7 @@ _dvm_install_version() {
         filename="Discord$branch_specifier"
     else
         platform="linux"
-        filename="discord-$1-$2"
+        filename="discord$dlserver_suffix_-$2"
     fi
     DL_PATH=$(printf "$DVM_DL_ENDPOINT" $dlserver_suffix $platform $2 $filename)
     echo "Downloading from $DL_PATH"
