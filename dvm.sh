@@ -144,7 +144,7 @@ _dvm_install_version() {
     curl -o $tempfile -XGET --progress-bar -H "DVM" $DL_PATH
     mkdir $DVM_LOCAL/branches/$1/
     tar -xzf $tempfile -C $DVM_LOCAL/branches/$1
-    echo $version > $DVM_LOCAL/branches/$1/Discord$branch_specifier/.version
+    echo $2 > $DVM_LOCAL/branches/$1/Discord$branch_specifier/.version
 }
 
 _dvm_install() {
